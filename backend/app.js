@@ -1,9 +1,17 @@
 const mongoose=require('mongoose')
+const express=require('express')
 const dotnev=require('dotenv').config()
-const port=3001
+const authRoutes=require('./ApiRouters/auth/authRoutes')
+const socketPort=3001
+const htppsPort=3002
+const app=express()
+app.listen(htppsPort,()=>{
+  console.log("Listening on port: "+htppsPort)
+})
+app.use(authRoutes)
 let id=""
 const dbUrl=dotnev.parsed.uri
-const io=require('socket.io')(port,{
+const io=require('socket.io')(socketPort,{
   cors:{
  origin:["http://localhost:3000"]
 }
@@ -24,7 +32,7 @@ userIo.on('connection',socket=>{
   console.log('Connected with user')
   socket.on('enter-chat',userId=>{
      socket.emit('getMessages',messageswithUser)    
-    const roomId=id+userId
+    const roomId=id+userI
     socket.join(roomId)
   })
   socket.on('send',(msg,room)=>{

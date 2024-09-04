@@ -1,11 +1,7 @@
 const mongoose=require('mongoose')
 const Schema=mongoose.Schema;
 const UserSchema=new Schema({
-  uid:{
-    type:String,
-    required:true
-  },
-  email:{
+   email:{
     type:String,
     required:true
   },
@@ -18,4 +14,5 @@ const UserSchema=new Schema({
     require:true
   }
 })
-export default UserSchema;
+const UserModel=mongoose.model("User",UserSchema)
+module.exports=UserModel
