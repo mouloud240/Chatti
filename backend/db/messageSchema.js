@@ -1,7 +1,7 @@
 const mongoose=require('mongoose')
 const Schema=mongoose.Schema;
   const messageSchema=new Schema({
-  senderId:{
+  sender_Id:{
     type:String,
     required:true
   },
@@ -10,4 +10,4 @@ const Schema=mongoose.Schema;
     required:true
   }
 },{timestamps:true}) 
-export default messageSchema
+module.exports=messageSchema

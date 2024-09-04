@@ -1,8 +1,9 @@
 const mongoose=require('mongoose');
-const { default: messageSchema } = require('./messageSchema');
 const Schema=mongoose.Schema;
+const messageSchema = require('./messageSchema');
 const roomSchema=new Schema({
-  _id:mongoose.Types.UUID,
+  _id:String,
   messages:[messageSchema]
 })
-export const roomModel=mongoose.model('Room',roomSchema)
+const roomModel=mongoose.model('Room',roomSchema)
+module.exports=roomModel

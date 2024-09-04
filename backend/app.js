@@ -2,6 +2,9 @@ const mongoose=require('mongoose')
 const express=require('express')
 const dotnev=require('dotenv').config()
 const authRoutes=require('./ApiRouters/auth/authRoutes')
+const UserModel = require('./db/userScheme')
+const roomModel = require('./db/roomSchema')
+const Mrouter = require('./ApiRouters/messages/routes')
 const socketPort=3001
 const htppsPort=3002
 const app=express()
@@ -11,6 +14,7 @@ app.listen(htppsPort,()=>{
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(authRoutes)
+app.use(Mrouter)
 let id=""
 const dbUrl=dotnev.parsed.uri
 const io=require('socket.io')(socketPort,{
@@ -18,36 +22,51 @@ const io=require('socket.io')(socketPort,{
  origin:["http://localhost:3000"]
 }
 })
-
+async function findRoom(id){
+  const room=await roomModel.findOne({_id:id})
+  return room
+}
 mongoose.connect(dbUrl).then(()=>{console.log('connected to db')})
-const users=[{
-  "name":"mouloud",
-  "uid":"148vfvfs8s4cskeja"
-}] //will bring it later from the db
-const messageswithUser=[{
-  "body":"Hello how are you",
-  "senderId":"I'm Fine",
-}]//will get it later from the db aswell
-const userIo=io.of('/uid')
+const userIo=io.of('/user')
 userIo.on('connection',socket=>{
   socket.emit('getUsers',users)
   console.log('Connected with user')
-  socket.on('enter-chat',userId=>{
-     socket.emit('getMessages',messageswithUser)    
-    const roomId=id+userI
+  socket.on('enter-chat',async userId=>{
+    const roomId=id+userId
+    const currRoom=await findRoom(roomId)
+    if (!currRoom){
+     const saveRoom=new roomModel({_id:roomId,messages:[]})
+      saveRoom.save()
+    }
+    
     socket.join(roomId)
   })
-  socket.on('send',(msg,room)=>{
+  socket.on('send',async (msg,room)=>{
     if (room!=""){
       socket.to(room).emit('rec',msg)
+     await roomModel.updateOne({_id:room},{$push:{messages:msg}},
+     (err,result)=>{
+          if (err){
+            console.log(err)
+          }else{
+            console.log(result)
+          }
+        }
+      ) 
     }
   })
 })
  
-
-userIo.use((socket,next)=>{
-  if(socket.handshake.auth.id){
-    console.log(socket.handshake.auth.id)
+async function checkId (id) {
+  const user=await UserModel.findById(id)
+  if (user){
+    return true
+  }else {
+    return false
+  }
+}
+userIo.use(async (socket,next)=>{
+  if(await checkId(socket.handshake.auth.id)){
     id=socket.handshake.auth.id
     next()
   }else {

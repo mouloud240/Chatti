@@ -1,12 +1,8 @@
 const express=require('express')
 const {query,validationResult, body}=require("express-validator")
 const router=express.Router()
-const dotnev=require('dotenv').config()
-const dbUri=dotnev.parsed.uri
 const bcrypt=require('bcrypt')
-const { decrypt } = require('dotenv')
 const UserModel = require('../../db/userScheme')
-const mongoose=require('mongoose')
 async function findUserByEmail (UserEmail){
   try{
     const user=await UserModel.findOne({email:UserEmail})
@@ -15,9 +11,6 @@ async function findUserByEmail (UserEmail){
    throw new Error(e)
   }
 }
-mongoose.connect(dbUri,{ writeConcern: { w: 'majority', wtimeout: 5000 }}).then(()=>{
-  console.log('auth Router connected')
-}).catch('err')
 router.get('/login',[
   query('email').isEmail().withMessage('Must be an email')
   ,query('password').notEmpty().withMessage('password must not be empty')
