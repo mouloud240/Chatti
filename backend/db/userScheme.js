@@ -11,7 +11,7 @@ const UserSchema=new Schema({
   },
   password:{
     type:String,
-    require:true
+    required:true
   }
 })
 const UserModel=mongoose.model("User",UserSchema)

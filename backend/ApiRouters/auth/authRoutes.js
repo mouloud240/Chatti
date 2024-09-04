@@ -9,15 +9,13 @@ const UserModel = require('../../db/userScheme')
 const mongoose=require('mongoose')
 async function findUserByEmail (UserEmail){
   try{
-    console.log(UserEmail)
     const user=await UserModel.findOne({email:UserEmail})
     return user
   }catch(e){
    throw new Error(e)
   }
 }
-
-mongoose.connect(dbUri).then(()=>{
+mongoose.connect(dbUri,{ writeConcern: { w: 'majority', wtimeout: 5000 }}).then(()=>{
   console.log('auth Router connected')
 }).catch('err')
 router.get('/login',[
@@ -33,9 +31,11 @@ router.get('/login',[
   const password=req.query.password
   const user=await findUserByEmail(email)
     if (user){
-     const match=bcrypt.compare(password, user.password)
+     const match=await bcrypt.compare(password, user.password)
       if (match){
         res.status(202).send(user._id)
+      }else{
+        res.send("wrong pass")
       }
     }else {
      
@@ -52,10 +52,11 @@ router.post('/signIn',[
 ],async (req,res)=>{
     const email=req.body.email;
     const userName=req.body.username;
-    const password=bcrypt.hash(req.body.password,10)    
+    const password=await bcrypt.hash(req.body.password,10)    
     const err=validationResult(req)
     if (!err.isEmpty()){
       res.status(400).json({errors:err.array()})
+      
     }else{
       const user=new UserModel({
         email:email,

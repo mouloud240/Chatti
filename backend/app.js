@@ -8,6 +8,8 @@ const app=express()
 app.listen(htppsPort,()=>{
   console.log("Listening on port: "+htppsPort)
 })
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 app.use(authRoutes)
 let id=""
 const dbUrl=dotnev.parsed.uri
