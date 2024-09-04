@@ -1,15 +1,15 @@
 const mongoose=require('mongoose')
+const dotnev=require('dotenv').config()
 const port=3001
 let id=""
-const uri = "mongodb+srv://mouloudhasrane24:Mdv.yt3152005@chatti.iwt0f.mongodb.net/main/?retryWrites=true&w=majoriy&appName=Chatti";
+const dbUrl=dotnev.parsed.uri
 const io=require('socket.io')(port,{
   cors:{
  origin:["http://localhost:3000"]
 }
 })
 
-mongoose.connect(uri,{  useNewUrlParser: true,
-  useUnifiedTopology: true,}).then(()=>{console.log('connected to db')})
+mongoose.connect(dbUrl).then(()=>{console.log('connected to db')})
 const users=[{
   "name":"mouloud",
   "uid":"148vfvfs8s4cskeja"
