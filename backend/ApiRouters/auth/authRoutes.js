@@ -26,7 +26,7 @@ router.get('/login',[
     if (user){
      const match=await bcrypt.compare(password, user.password)
       if (match){
-        res.status(202).send(user._id)
+        res.status(202).send({token:user._id,userName:user.userName})
       }else{
         res.send("wrong pass")
       }
@@ -51,6 +51,10 @@ router.post('/signIn',[
       res.status(400).json({errors:err.array()})
       
     }else{
+       if (await findUserByEmail(email)){
+        res.send("User Already Exists")
+        return;
+      }
       const user=new UserModel({
         email:email,
         password:password,

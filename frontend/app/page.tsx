@@ -1,33 +1,33 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import {io} from 'socket.io-client'
+import { useEffect,} from "react"
+import UseAuthStore from "./state/auth/store"
+import { useRouter } from "next/navigation"
 export default function  Page() {
-  const [socket,SetSocket]=useState<any>(null)
+  const router=useRouter()
+  const loggedState=UseAuthStore((state)=>state.logged)
+const token=UseAuthStore((state)=>state.token)
+  const user=UseAuthStore((state)=>state.userName)
+  const setter=UseAuthStore((state)=>state.setInfo)
+  const handleButtonclick=()=>{
+    setter("","",false)
+    router.push('./pages/auth/login/')
+  }
   useEffect(()=>{
-   const newSocket=io('http://localhost:3001/uid',{auth:{id:"1548kgf,"}})
-    SetSocket(newSocket)
-    newSocket.on('connect',()=>{
-      console.log('connected to ws')
-    })
-  },[])
-  const handleSend=()=>{
-    if (socket){
-socket.emit("rec")
-      console.log(socket)
-      console.log('sent')
-  }else{
-      console.log('Not found')
-    }
-  } 
-  
+    if (!loggedState){
+    router.push("./pages/auth/login/")
+    } 
+  },[loggedState, router])
   return (
     <div>
+      {
+        loggedState&&<div>   Welcome to the home page Mr.{user} with the token {token}
 
-      <button onClick={()=>{handleSend()}}>
-        send
-      </button>
-    </div>
+
+           <button className="bg-blue-500 text-white rounde-lg p-4" onClick={()=>{handleButtonclick()}} >Logout</button>
+        </div>
+      }
+  </div>
   )
 }
 
