@@ -61,7 +61,7 @@ router.post('/signIn',[
         userName:userName
       })
       const newUser=await user.save()
-      res.send(newUser._id)
+      res.send({token:newUser._id,username:newUser.userName})
     }
   })
 module.exports=router
