@@ -59,7 +59,7 @@ export default function  Page() {
 
 
  
-          <button className="bg-blue-500 text-white rounded-lg p-4" onClick={()=>{handleButtonclick()}} >Logout</button>
+          <button className=" ml-4 bg-blue-500 text-white rounded-lg p-4" onClick={()=>{handleButtonclick()}} >Logout</button>
        <div>
             <ul className="flex flex-col gap-4">
               {

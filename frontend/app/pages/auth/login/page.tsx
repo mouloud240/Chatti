@@ -13,7 +13,6 @@ function Page ()  {
     password:String;
   } 
   const router=useRouter()
-  const params=useSearchParams()
   const {register,handleSubmit,formState:{errors}}=useForm()
   const stateSetter=UseAuthStore(state=>state.setInfo)
   const handlebuttonclick=async(data:loginInterface)=>{
@@ -25,7 +24,7 @@ function Page ()  {
     const res=await axios.get("http://localhost:3002/login",{params:{email:email,password:password}})
     if (res.status==202){
         const data=res.data
-        stateSetter(data.token,data.username,true)
+        stateSetter(data.token,data.userName,true)
         router.push("/")
       }
     console.log(res.data)

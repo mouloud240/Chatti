@@ -13,7 +13,7 @@ function Page (){
     const handleSignin=async (data:any)=>{
     try{
  const res=await axios.post('http://localhost:3002/signIn',{
-      username:data.username,
+      username:data.userName,
       email:data.email,
       password:data.password
     })

@@ -32,9 +32,8 @@ mongoose.connect(dbUrl,{w:"majority"}).then(()=>{console.log('connected to db')}
 const userIo=io.of('/user')
 userIo.on('connection',socket=>{
   console.log('Connected with user')
-  socket.on('enter-chat',async userId=>{
-    console.log('entred chat')
-    const roomId=id+userId
+  socket.on('enter-chat',async receiverId=>{
+    const roomId=receiverId>id? id+receiverId:id+receiverId
     const currRoom=await findRoom(roomId)
     if (!currRoom){
      const saveRoom=new roomModel({_id:roomId,messages:[]})

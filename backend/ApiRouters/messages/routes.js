@@ -43,7 +43,7 @@ query('room').notEmpty().withMessage('Provide a room')
       return 
     }else{
       const Newroom=new roomModel({
-        _id:room+token,
+        _id:room>token?token+room:room+token,
         messages:[]
       })
       await Newroom.save()
