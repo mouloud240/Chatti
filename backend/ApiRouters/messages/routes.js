@@ -29,7 +29,7 @@ Mrouter.get('/allUsers',[
     res.send(users)
 })
 Mrouter.get('/roomMessages',[
-query('token').isMongoId().withMessage('Provide a valid token'),
+query('token').notEmpty().withMessage('Provide a valid token'),
 query('room').notEmpty().withMessage('Provide a room')
 ],async (req,res)=>{
     const token=req.query.token

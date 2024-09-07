@@ -8,11 +8,17 @@ interface user{
 }
 
 const UseAuthStore=create<user>(
+  persist(
   (set)=>({
    token:"",
     userName:"",
     logged:false,
     setInfo:(token,userName,logged)=>set((state)=>({token:token,logged:logged,userName:userName}))
-  })
+  }),
+  {
+      name:"app-storage",
+     getStorage:()=>localStorage,
+     }
+  )
 )
 export default UseAuthStore
