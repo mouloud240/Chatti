@@ -31,9 +31,9 @@ async function findRoom(id){
 mongoose.connect(dbUrl,{w:"majority"}).then(()=>{console.log('connected to db')})
 const userIo=io.of('/user')
 userIo.on('connection',socket=>{
-  socket.emit('getUsers',users)
   console.log('Connected with user')
   socket.on('enter-chat',async userId=>{
+    console.log('entred chat')
     const roomId=id+userId
     const currRoom=await findRoom(roomId)
     if (!currRoom){
@@ -47,14 +47,8 @@ userIo.on('connection',socket=>{
     if (room!=""){
       socket.to(room).emit('rec',msg)
      await roomModel.updateOne({_id:room},{$push:{messages:msg}},
-     (err,result)=>{
-          if (err){
-            console.log(err)
-          }else{
-            console.log(result)
-          }
-        }
-      ) 
+     
+      ).then(()=>{}).catch((e)=>console.log(e)) 
     }
   })
 })

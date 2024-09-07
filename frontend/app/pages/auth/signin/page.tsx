@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form"
 import styles from "./page.module.css"
 import axios from "axios"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import UseAuthStore from "@/app/state/auth/store"
 import Image from "next/image"
 function Page (){
@@ -10,7 +10,7 @@ function Page (){
   const router=useRouter()
   const setter=UseAuthStore((state)=>state.setInfo)
     const inputStyle="bg-gray-400 rounded-xl text-gray-800 p-4 flex items-center  font-bold ring-gray-50 ring-2 focus:ring-2 focus:ring-blue-300 placeholder:text-gray-800"
-  const handleSignin=async (data:any)=>{
+    const handleSignin=async (data:any)=>{
     try{
  const res=await axios.post('http://localhost:3002/signIn',{
       username:data.username,

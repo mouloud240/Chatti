@@ -37,12 +37,17 @@ query('room').notEmpty().withMessage('Provide a room')
     if (! await findUserwithID(token)){
      res.status(400).send('Token error')
     return;}
-    const currRoom=await roomModel.findOne({_id:room})
+    const currRoom=await roomModel.findOne({_id:room+token})
     if (currRoom){
       res.send(currRoom.messages)
       return 
     }else{
-      res.status(400).send('Room not found')
+      const Newroom=new roomModel({
+        _id:room+token,
+        messages:[]
+      })
+      await Newroom.save()
+      res.send([])
     }
   })
 

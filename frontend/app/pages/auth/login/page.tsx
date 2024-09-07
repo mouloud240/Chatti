@@ -1,7 +1,7 @@
 "use client"
 import UseAuthStore from "@/app/state/auth/store"
 import axios from "axios";
-import { useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import styles from "./page.module.css"
 import { useEffect } from "react";
@@ -13,6 +13,7 @@ function Page ()  {
     password:String;
   } 
   const router=useRouter()
+  const params=useSearchParams()
   const {register,handleSubmit,formState:{errors}}=useForm()
   const stateSetter=UseAuthStore(state=>state.setInfo)
   const handlebuttonclick=async(data:loginInterface)=>{
@@ -50,7 +51,7 @@ function Page ()  {
         <button type="submit" className="flex items-center justify-center text-white font-bold bg-blue-500 rounded-xl  p-4 px-10 "> Log in</button>
         </form>
        <div className="flex mb-4 gap-2">
-            <h2 className="font-semibold text-xl">No account?</h2> <Link href={"./signin/"}><button className="text-purple-500 font-semibold text-xl">Sign Up now</button></Link>
+            <h2 className="font-semibold text-xl">No account?</h2> <Link href={"./signin?id=48denjq874"}><button className="text-purple-500 font-semibold text-xl">Sign Up now</button></Link>
           </div> 
       </div> 
     </div>

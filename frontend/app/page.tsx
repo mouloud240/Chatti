@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import User from "./components/user"
 import axios from "axios"
 export default function  Page() {
-  interface user{
+  interface userType{
     
     userName:string;
     _id:String;
@@ -20,7 +20,7 @@ export default function  Page() {
   
   const userToken=UseAuthStore((state)=>state.token)
   const setter=UseAuthStore((state)=>state.setInfo)
-  const [users,setUsers]=useState([])
+  const [users,setUsers]=useState<userType[]>([])
   
   useEffect(()=>{
     setIsMounted(true)
@@ -28,18 +28,24 @@ export default function  Page() {
   const handleButtonclick=()=>{
 
     setter("","",false)
-    router.push('./pages/auth/login/')
+    router.push('./pages/auth/login?id=484848')
   }
+
   useEffect(()=>{
       async function fetchUsers(){
+      try{
+
     const res=await axios.get(url,{params:{token:userToken}}) 
       setUsers(res.data)
+      }catch(e){
+      console.log(e)
+      }
   }
 
      fetchUsers()},[userToken])
   useEffect(()=>{
     if (!loggedState){
-    router.push("./pages/auth/login/")
+    router.push("./pages/auth/login?id=dkcdk784")
     } 
   },[loggedState, router])
   if (!IsMounted){
