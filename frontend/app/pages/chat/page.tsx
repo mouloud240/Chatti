@@ -3,7 +3,9 @@
 import Chat from "@/app/components/chat"
 import UseAuthStore from "@/app/state/auth/store"
 import axios from "axios"
-import { useSearchParams } from "next/navigation"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { io, Socket } from "socket.io-client"
 
@@ -14,6 +16,7 @@ const Page = () => {
 };
   const params=useSearchParams()
   const receiverId=params.get('uid')
+  const accountName="Mouloud 250"
   const userId=UseAuthStore((state)=>state.token)
   const url=`http://localhost:3002/roomMessages?token=${userId}&room=${receiverId}`
   const [messages,setMessages]=useState<Message[]>([])
@@ -42,8 +45,11 @@ const Page = () => {
   },[receiverId, userId])
   function handleButtonClick(){
     console.log(Currmessage)
+    let sendId=userId+receiverId!;
+    sendId=sendId.split('').sort().join('')
+
     if (socket){
-      socket.emit('send',{body:Currmessage,sender_Id:userId},receiverId!>userId?userId+receiverId!:receiverId!+userId)
+      socket.emit('send',{body:Currmessage,sender_Id:userId},sendId)
 
       const msg:Message= {sender_Id:userId,body:Currmessage}
        setMessages(prev=>[...prev,msg]) 
@@ -52,6 +58,15 @@ const Page = () => {
   }
   return (
     <div>
+      <div className="flex justify-between px-4">
+        <Link href={'/'}><Image src={"/assets/icons/back.svg"} width={40} height={30} alt="back"/>
+        </Link>
+
+      <p className="text-xl self-center mx-auto font-bold text-white">
+        {accountName}
+      </p>
+      </div>
+
       <ul>
         {
           messages.map((item,index)=>{

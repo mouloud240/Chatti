@@ -33,7 +33,8 @@ const userIo=io.of('/user')
 userIo.on('connection',socket=>{
   console.log('Connected with user')
   socket.on('enter-chat',async receiverId=>{
-    const roomId=receiverId>id? id+receiverId:id+receiverId
+    let roomId= id+receiverId
+    roomId=roomId.split('').sort().join('')
     const currRoom=await findRoom(roomId)
     if (!currRoom){
      const saveRoom=new roomModel({_id:roomId,messages:[]})

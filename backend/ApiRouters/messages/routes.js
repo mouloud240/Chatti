@@ -37,7 +37,9 @@ query('room').notEmpty().withMessage('Provide a room')
     if (! await findUserwithID(token)){
      res.status(400).send('Token error')
     return;}
-    const currRoom=await roomModel.findOne({_id:room+token})
+    let searchRoom=room+token
+    searchRoom=searchRoom.split('').sort().join('')
+    const currRoom=await roomModel.findOne({_id:searchRoom})
     if (currRoom){
       res.send(currRoom.messages)
       return 

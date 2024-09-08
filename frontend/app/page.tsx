@@ -8,8 +8,8 @@ export default function  Page() {
   interface userType{
     
     userName:string;
-    _id:String;
-    email:String
+    _id:string;
+    email:string
   
   }
   const router=useRouter()
@@ -54,13 +54,16 @@ export default function  Page() {
   return (
     <>
       {
-        loggedState&&(<div>   Welcome to the home page Mr.{user}
+        loggedState&&(<div className="">  
+          <div className="flex justify-around p-10"> <p className="text-white font-bold text-xl ">  Welcome to the home page Mr.{user}
+          </p>
 
 
 
- 
-          <button className=" ml-4 bg-blue-500 text-white rounded-lg p-4" onClick={()=>{handleButtonclick()}} >Logout</button>
-       <div>
+
+
+            <button className=" ml-4 bg-blue-500 text-white rounded-lg p-4" onClick={()=>{handleButtonclick()}} >Logout</button>
+          </div>       <div>
             <ul className="flex flex-col gap-4">
               {
               
