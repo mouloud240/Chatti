@@ -6,7 +6,8 @@ import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { EventType } from "react-hook-form"
 import { io, Socket } from "socket.io-client"
 
 const Page = () => {
@@ -16,7 +17,8 @@ const Page = () => {
 };
   const params=useSearchParams()
   const receiverId=params.get('uid')
-  const accountName="Mouloud 250"
+  const currRoomName=params.get('username')
+  const accountName=currRoomName
   const userId=UseAuthStore((state)=>state.token)
   const url=`http://localhost:3002/roomMessages?token=${userId}&room=${receiverId}`
   const [messages,setMessages]=useState<Message[]>([])
@@ -25,7 +27,6 @@ const Page = () => {
    useEffect(()=>{
     async function fetchMessages(){
       const res=await axios.get(url)
-      console.log(res.data)
       setMessages(res.data)
     }
     fetchMessages()
@@ -43,8 +44,7 @@ const Page = () => {
     })
     return ()=>{newSocket.disconnect()}
   },[receiverId, userId])
-  function handleButtonClick(){
-    console.log(Currmessage)
+  const handleSendMessage= useCallback(function handleButtonClick(){
     let sendId=userId+receiverId!;
     sendId=sendId.split('').sort().join('')
 
@@ -55,8 +55,26 @@ const Page = () => {
        setMessages(prev=>[...prev,msg]) 
     }
     setCurrMessage('')
-  }
-  return (
+  },[Currmessage, receiverId, socket, userId])
+  
+
+  useEffect(()=>{
+    const handleEventListner=(event:KeyboardEvent)=>{
+      event.stopPropagation()
+      if (event.key=="Enter"){
+        event.preventDefault()
+        console.log("Enter pressed")
+        if (Currmessage==""){
+        return;
+        }
+       handleSendMessage()   
+        return;
+      }
+    }
+    window.addEventListener("keyup",handleEventListner)
+    return ()=>window.removeEventListener('keyup',handleEventListner)
+  },[Currmessage, handleSendMessage])
+   return (
     <div>
       <div className="flex justify-between px-4">
         <Link href={'/'}><Image src={"/assets/icons/back.svg"} width={40} height={30} alt="back"/>
@@ -72,11 +90,8 @@ const Page = () => {
           messages.map((item,index)=>{
             let style="text-white font-semibold flex px-10 py-2 "
 
-            console.log(item.sender_Id)
             if (item.sender_Id==userId){
-              console.log('end put')
               style=style+" justify-end"
-              console.log(style)
             }
              return (
             <li key={index} className={style}>
@@ -87,7 +102,7 @@ const Page = () => {
       </ul>
       <div className="flex justify-center gap-4 p-10">
         <input value={Currmessage} type="text" onChange={(e)=>{setCurrMessage(e.target.value)}} className="px-96 py-4 text-black bg-white rounded-lg text-xl " />
-       <button onClick={()=>{handleButtonClick()}} className="bg-gray-500 font-semibold text-white text-xl rounded-xl p-4 px-8">Send</button> 
+       <button onClick={()=>{handleSendMessage()}} className="bg-gray-500 font-semibold text-white text-xl rounded-xl p-4 px-8">Send</button> 
       </div> 
 
     </div>

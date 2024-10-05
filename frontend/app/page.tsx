@@ -28,7 +28,7 @@ export default function  Page() {
   const handleButtonclick=()=>{
 
     setter("","",false)
-    router.push('./pages/auth/login?id=484848')
+    router.push('./pages/auth/login')
   }
 
   useEffect(()=>{
@@ -45,7 +45,7 @@ export default function  Page() {
      fetchUsers()},[userToken])
   useEffect(()=>{
     if (!loggedState){
-    router.push("./pages/auth/login?id=dkcdk784")
+    router.push("./pages/auth/login")
     } 
   },[loggedState, router])
   if (!IsMounted){

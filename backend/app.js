@@ -28,7 +28,7 @@ async function findRoom(id){
   const room=await roomModel.findOne({_id:id})
   return room
 }
-mongoose.connect(dbUrl,{w:"majority"}).then(()=>{console.log('connected to db')})
+mongoose.connect(dbUrl,{w:"majority"}).then(()=>{console.log('connected to db'+dbUrl)})
 const userIo=io.of('/user')
 userIo.on('connection',socket=>{
   console.log('Connected with user')
