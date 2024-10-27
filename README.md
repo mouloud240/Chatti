@@ -1,11 +1,14 @@
 # Chatti
 
-Chatti is a simple chat application built using **Node.js**, **Express**, **MongoDB**, and **Socket.io**. This project is intended for **educational purposes only** and is not meant to be a production-ready application. The primary goal of Chatti is to help developers understand the basics of building real-time chat applications with authentication.
+Chatti is a simple chat application built using **Node.js**, **Express**, **MongoDB**, and **Socket.io**. This project is intended for **educational purposes only** and is not meant to be a production-ready application. The primary goal of Chatti is to help developers understand the basics of building real-time chat applications with authentication. 
+This project doesn't Follow the best practises whatsoever the goal of it  is to show  how websocket works .
+The ui Kinda sucks so feel free to Modify it as you please and put pr (Please) i will merge it the master branch.
+ps:If you didn't Undersant the code I will soon push some refactoring to make it more readable +with comments 
 
 ---
 
 ## Features
-- User Authentication (JWT-based)
+- User Authentication (JWT-based) (Not implemented Yet)
 - Real-time messaging using Socket.io
 - Basic input validation using express-validator
 - Password hashing using bcrypt
