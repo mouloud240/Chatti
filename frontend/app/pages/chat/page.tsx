@@ -15,6 +15,7 @@ const Page = () => {
   sender_Id: String;
   body: string;
 };
+  const [typing,setTyping]=useState(false);
   const params=useSearchParams()
   const receiverId=params.get('uid')
   const currRoomName=params.get('username')
@@ -40,7 +41,14 @@ const Page = () => {
     })
     newSocket.emit('enter-chat',receiverId)
     newSocket.on('rec',(msg)=>{
+      setTyping(false);
       setMessages(prevmessage=>[...prevmessage,msg])
+    })
+    newSocket.on('Typing',()=>{
+      setTyping(true);
+    })
+    newSocket.on('idle',()=>{
+      setTyping(false);
     })
     return ()=>{newSocket.disconnect()}
   },[receiverId, userId])
@@ -59,6 +67,19 @@ const Page = () => {
   
 
   useEffect(()=>{
+    if( Currmessage==""){
+      if (socket){
+        let sendId=userId+receiverId!;
+    sendId=sendId.split('').sort().join('')
+        socket.emit('idle',sendId)
+      }
+    }
+    if (Currmessage!=""){
+      if (socket){
+            let sendId=userId+receiverId!;
+    sendId=sendId.split('').sort().join('')
+        socket.emit('Typing',sendId)}
+    }
     const handleEventListner=(event:KeyboardEvent)=>{
       event.stopPropagation()
       if (event.key=="Enter"){
@@ -73,7 +94,7 @@ const Page = () => {
     }
     window.addEventListener("keyup",handleEventListner)
     return ()=>window.removeEventListener('keyup',handleEventListner)
-  },[Currmessage, handleSendMessage])
+  },[Currmessage, handleSendMessage, receiverId, socket, userId])
    return (
     <div>
       <div className="flex justify-between px-4">
@@ -99,6 +120,9 @@ const Page = () => {
               </li>
           ) })
         }
+        <li className="flex justify-start">
+          {typing && <p className="text-white text-center font-semibold">Typing...</p>}
+        </li>
       </ul>
       <div className="flex justify-center gap-4 p-10">
         <input value={Currmessage} type="text" onChange={(e)=>{setCurrMessage(e.target.value)}} className="px-96 py-4 text-black bg-white rounded-lg text-xl " />

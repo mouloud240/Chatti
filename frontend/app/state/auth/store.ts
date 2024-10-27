@@ -8,6 +8,7 @@ interface user{
 }
 
 const UseAuthStore=create<user>(
+  // @ts-ignore comment
   persist(
   (set)=>({
    token:"",

@@ -51,6 +51,14 @@ userIo.on('connection',socket=>{
       ).then(()=>{}).catch((e)=>console.log(e)) 
     }
   })
+  socket.on('Typing',(room)=>{
+    console.log("Typing");
+    socket.to(room).emit('Typing')
+  })
+  socket.on('idle',(room)=>{
+    console.log("idle");
+    socket.to(room).emit('idle')
+  })
 })
  
 async function checkId (id) {
